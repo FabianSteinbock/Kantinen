@@ -1,39 +1,30 @@
 ﻿@page
+@using IBAS_kantine
 @model IndexModel
+
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Kantinens Menu  for uge 45</h1>
+    <h1 class="display-4">Kantinens Menu for uge 45</h1>
     <table>
         <thead>
-			<tr>
-				<th>Dag</th>
-				<th>Varm ret</th>
+            <tr>
+                <th>Dag</th>
+                <th>Varm ret</th>
                 <th>Kold ret</th>
-			</tr>
-    <tr>
-        <td>
-            <p>Mandag</p>
-            <p>Tirsdag</p>
-            <p>Onsdag</p>
-            <p>Torsdag</p>
-            <p>Fredag</p>
-        </td>
-        <td>
-			<p>Lasagne</p>
-			<p>Forloren hare</p>
-			<p>Stegt flæsk</p>
-			<p>Wok</p>
-			<p>Stegt flæsk</p>  
-		</td>
-        <td>
-            <p>Rejesalat</p>
-            <p>Grønærtesuppe</p>
-            <p>Rugbrødsbord</p>
-            <p>Højbelagt smørbrød</p>
-            <p>Grønærtesuppe</p>
-    </tr>
-</table>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var menuItem in Model.MenuItems)
+            {
+            <tr>
+                <td>@menuItem.Dag</td>
+                <td>@menuItem.VarmRet</td>
+                <td>@menuItem.KoldRet</td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>

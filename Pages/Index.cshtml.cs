@@ -26,6 +26,7 @@ public class IndexModel : PageModel
     {
         var tableName = "KantineMenuen";
         var accountName = "kantinemenustorage"; // Replace with your Azure Storage accoun
+        var accountKey = "YOUR_STORAGE_ACCOUNT_KEY"; // Replace with your Azure Storage account key
         var tableEndpoint = $"https://kantinemenustorage.table.core.windows.net/KantineMenuen";
 
         // Initialize TableClient with TableSharedKeyCredential

@@ -1,5 +1,3 @@
-
-
 using Azure.Data.Tables;
 using Azure;
 using IBAS_kantine;

@@ -24,7 +24,7 @@ namespace IBAS_kantine
         {
             //Her bruges Connectionstring
             var connectionString = "DefaultEndpointsProtocol=https;AccountName=kantinemenustorage;AccountKey=qMlBcp7yi0VYR6j+ZTq7h2cTSWeQSajA6ixa6v9GVlxw4GbHK5sdprPJABtDn00Evf7RKoQY7aDI+AStnTn1OQ==;BlobEndpoint=https://kantinemenustorage.blob.core.windows.net/;FileEndpoint=https://kantinemenustorage.file.core.windows.net/;TableEndpoint=https://kantinemenustorage.table.core.windows.net/;QueueEndpoint=https://kantinemenustorage.queue.core.windows.net/";
-            
+             
             /*bud på at lave det uden connectionstring - udfordringen er, at den returner null hver gang. 
             var tableUri = Environment.GetEnvironmentVariable("AZURE_STORAGETABLE_CONNECTIONSTRING");
             */

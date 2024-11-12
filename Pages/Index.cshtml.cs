@@ -1,57 +1,54 @@
-using Azure.Data.Tables;
 using Azure;
-using IBAS_kantine;
-using Microsoft.AspNetCore.Mvc;
+using Azure.Data.Tables;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using Azure.Core;
+using Azure.Storage.Blobs;
 
 
-namespace IBAS_kantine;
 
-public class IndexModel : PageModel
+namespace IBAS_kantine
 {
-    private readonly ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
+    public class IndexModel : PageModel
     {
-        _logger = logger;
-    }
+        private readonly ILogger<IndexModel> _logger;
 
-    // Make menuItems a public property so it can be accessed in Razor
-    public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>();
-
-    public void OnGet()
-    {
-        var tableName = "KantineMenuen";
-        var accountName = "kantinemenustorage"; // Replace with your Azure Storage accoun
-        var accountKey = "YOUR_STORAGE_ACCOUNT_KEY"; // Replace with your Azure Storage account key
-        var tableEndpoint = $"https://kantinemenustorage.table.core.windows.net/KantineMenuen";
-
-        // Initialize TableClient with TableSharedKeyCredential
-        var credential = new TableSharedKeyCredential(accountName, accountKey);
-        var tableClient = new TableClient(new Uri(tableEndpoint), tableName, credential);
-
-
-        Pageable<TableEntity> entities = tableClient.Query<TableEntity>();
-
-        // Define the day order
-        var dayOrder = new List<string> { "mandag", "tirsdag", "onsdag", "torsdag", "fredag" };
-
-        foreach (TableEntity entity in entities)
+        public IndexModel(ILogger<IndexModel> logger)
         {
-            var menuItem = new MenuItem
-            {
-                Dag = entity["RowKey"].ToString().ToLower(),
-                KoldRet = entity["KoldRet"].ToString(),
-                VarmRet = entity["VarmRet"].ToString()
-            };
-            MenuItems.Add(menuItem);
+            _logger = logger;
         }
 
-        // Sort MenuItems based on the dayOrder list
-        MenuItems = MenuItems.OrderBy(item => dayOrder.IndexOf(item.Dag)).ToList();
-    }
+        // Make MenuItems a public property so it can be accessed in Razor
+        public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>();
 
+        public void OnGet()
+        {
+            //Blob connection string hentes her
+            var connectionString =Environment.GetEnvironmentVariable("BlobStorageConnectionString");
+
+            //opretter blobserviceclient opjekt
+            var blobServiceClient = new BlobServiceClient (connectionString);
+            var tableName = "KantineMenuen";
+            TableClient tableClient = new TableClient(connectionString, tableName);
+
+            Pageable<TableEntity> entities = tableClient.Query<TableEntity>();
+
+
+            var dayOrder = new List<string> { "mandag", "tirsdag", "onsdag", "torsdag", "fredag" };
+            foreach (TableEntity entity in entities)
+            {
+                var menuItem = new MenuItem
+                {
+                    Dag = entity["RowKey"].ToString().ToLower(),
+                    KoldRet = entity["KoldRet"].ToString(),
+                    VarmRet = entity["VarmRet"].ToString()
+                };
+                MenuItems.Add(menuItem);
+            }
+            MenuItems = MenuItems.OrderBy(item => dayOrder.IndexOf(item.Dag)).ToList();
+
+
+
+
+          
+        }
+    }
 }
